@@ -1,4 +1,4 @@
-package dev.nastyazhabko.eventmanager.Location;
+package dev.nastyazhabko.eventmanager.location;
 
 import jakarta.persistence.EntityNotFoundException;
 import org.slf4j.Logger;
@@ -58,14 +58,15 @@ public class LocationService {
 
         logger.info("Updating location: id = {}, locationToUpdate = {}", id, locationToUpdate);
 
-
-        locationRepository.update(
+        Location locationToUpdateWithId = new Location(
                 id,
                 locationToUpdate.name(),
                 locationToUpdate.address(),
                 locationToUpdate.capacity(),
                 locationToUpdate.description()
         );
+
+        locationRepository.save(locationEntityConverter.toEntity(locationToUpdateWithId));
 
         return getLocationById(id);
     }

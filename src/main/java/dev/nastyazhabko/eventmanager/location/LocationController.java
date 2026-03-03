@@ -1,4 +1,4 @@
-package dev.nastyazhabko.eventmanager.Location;
+package dev.nastyazhabko.eventmanager.location;
 
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
