@@ -1,6 +1,5 @@
 package dev.nastyazhabko.eventmanager.user;
 
-import dev.nastyazhabko.eventmanager.location.LocationDto;
 import dev.nastyazhabko.eventmanager.security.SignInRequest;
 import dev.nastyazhabko.eventmanager.security.SignUpRequest;
 import dev.nastyazhabko.eventmanager.security.jwt.AuthenticationService;
@@ -54,7 +53,6 @@ public class UserController {
     @GetMapping("/{id}")
     public UserDto getUserById(@PathVariable int id) {
         log.info("Get request for user with id {}", id);
-        authenticationService.getCurrentAuthenticatedUserOrThrow();
         User user = userService.getUserById(id);
 
         return new UserDto(
