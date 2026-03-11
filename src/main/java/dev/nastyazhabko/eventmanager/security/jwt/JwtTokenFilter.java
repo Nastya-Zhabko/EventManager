@@ -40,7 +40,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
-        var jwtToken = authorizationHeader.substring(7);
+        var jwtToken = authorizationHeader.substring("Bearer ".length());
         String loginFromToken;
         try {
             loginFromToken = jwtUtil.getLoginFromToken(jwtToken);
