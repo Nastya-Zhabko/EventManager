@@ -35,7 +35,7 @@ public class RegistrationService {
         if (event.isEmpty()) {
             throw new EntityNotFoundException("Event with id= " + id + " not found");
         }
-        if (event.get().getStatus() == EventStatus.FINISHED || event.get().getStatus() == EventStatus.CANCELLED) {
+        if (event.get().getStatus() == EventStatus.STARTED ||event.get().getStatus() == EventStatus.FINISHED || event.get().getStatus() == EventStatus.CANCELLED) {
             throw new IllegalStateException("Event with id= " + id + " already finished");
         }
         if (event.get().getOccupiedPlaces() + 1 > event.get().getMaxPlaces()) {

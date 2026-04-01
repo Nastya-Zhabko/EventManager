@@ -42,4 +42,6 @@ public interface EventRepository extends JpaRepository<EventEntity, Integer> {
                                      @Param("eventStatus") EventStatus eventStatus);
 
     List<EventEntity> findEventsByStatus(EventStatus status);
+
+    boolean existsByLocationId(int id);
 }
