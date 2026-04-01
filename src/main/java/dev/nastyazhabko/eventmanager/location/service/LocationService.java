@@ -1,5 +1,9 @@
-package dev.nastyazhabko.eventmanager.location;
+package dev.nastyazhabko.eventmanager.location.service;
 
+import dev.nastyazhabko.eventmanager.location.converter.LocationEntityConverter;
+import dev.nastyazhabko.eventmanager.location.dto.Location;
+import dev.nastyazhabko.eventmanager.location.entity.LocationEntity;
+import dev.nastyazhabko.eventmanager.location.repository.LocationRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

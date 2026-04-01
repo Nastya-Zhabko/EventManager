@@ -1,4 +1,4 @@
-package dev.nastyazhabko.eventmanager.location;
+package dev.nastyazhabko.eventmanager.location.dto;
 
 public record Location(
         Integer id,

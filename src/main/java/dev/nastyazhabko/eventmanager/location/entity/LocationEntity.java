@@ -1,4 +1,4 @@
-package dev.nastyazhabko.eventmanager.location;
+package dev.nastyazhabko.eventmanager.location.entity;
 
 import jakarta.persistence.*;
 

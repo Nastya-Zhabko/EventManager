@@ -1,4 +1,4 @@
-package dev.nastyazhabko.eventmanager.user;
+package dev.nastyazhabko.eventmanager.user.enums;
 
 public enum UserRole {
     ROLE_USER,
