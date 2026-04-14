@@ -1,5 +1,6 @@
-package dev.nastyazhabko.eventmanager.user;
+package dev.nastyazhabko.eventmanager.user.repository;
 
+import dev.nastyazhabko.eventmanager.user.entity.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

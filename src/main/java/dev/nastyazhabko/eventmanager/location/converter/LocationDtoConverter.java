@@ -1,5 +1,7 @@
-package dev.nastyazhabko.eventmanager.location;
+package dev.nastyazhabko.eventmanager.location.converter;
 
+import dev.nastyazhabko.eventmanager.location.dto.Location;
+import dev.nastyazhabko.eventmanager.location.dto.LocationDto;
 import org.springframework.stereotype.Component;
 
 @Component

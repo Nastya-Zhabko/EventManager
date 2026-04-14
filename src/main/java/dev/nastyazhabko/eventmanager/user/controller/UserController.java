@@ -1,9 +1,12 @@
-package dev.nastyazhabko.eventmanager.user;
+package dev.nastyazhabko.eventmanager.user.controller;
 
 import dev.nastyazhabko.eventmanager.security.SignInRequest;
 import dev.nastyazhabko.eventmanager.security.SignUpRequest;
 import dev.nastyazhabko.eventmanager.security.jwt.AuthenticationService;
 import dev.nastyazhabko.eventmanager.security.jwt.JwtTokenResponse;
+import dev.nastyazhabko.eventmanager.user.service.UserService;
+import dev.nastyazhabko.eventmanager.user.dto.User;
+import dev.nastyazhabko.eventmanager.user.dto.UserDto;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

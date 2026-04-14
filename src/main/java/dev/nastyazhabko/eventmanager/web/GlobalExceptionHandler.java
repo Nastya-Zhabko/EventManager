@@ -1,5 +1,6 @@
 package dev.nastyazhabko.eventmanager.web;
 
+import dev.nastyazhabko.eventmanager.location.exception.LocationHaveEventsException;
 import jakarta.persistence.EntityNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import java.nio.file.attribute.UserPrincipalNotFoundException;
 import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 
@@ -40,7 +42,18 @@ public class GlobalExceptionHandler {
     }
 
 
-    @ExceptionHandler({MethodArgumentNotValidException.class, IllegalArgumentException.class})
+    @ExceptionHandler(UserPrincipalNotFoundException.class)
+    public ResponseEntity<ServerErrorDto> handleHaveNotAuthoritiesException(UserPrincipalNotFoundException e) {
+        log.error("Got exception", e);
+
+        var errorDto = new ServerErrorDto("Не достаточно прав",
+                e.getMessage(),
+                LocalDateTime.now());
+
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(errorDto);
+    }
+
+    @ExceptionHandler({MethodArgumentNotValidException.class, IllegalArgumentException.class, LocationHaveEventsException.class})
     public ResponseEntity<ServerErrorDto> handleValidationException(Exception e) {
         log.error("Got exception", e);
 

@@ -1,4 +1,4 @@
-package dev.nastyazhabko.eventmanager.location;
+package dev.nastyazhabko.eventmanager.location.dto;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;

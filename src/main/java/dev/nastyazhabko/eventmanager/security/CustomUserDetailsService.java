@@ -1,7 +1,7 @@
 package dev.nastyazhabko.eventmanager.security;
 
-import dev.nastyazhabko.eventmanager.user.UserEntity;
-import dev.nastyazhabko.eventmanager.user.UserRepository;
+import dev.nastyazhabko.eventmanager.user.entity.UserEntity;
+import dev.nastyazhabko.eventmanager.user.repository.UserRepository;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

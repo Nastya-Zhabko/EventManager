@@ -1,5 +1,9 @@
-package dev.nastyazhabko.eventmanager.location;
+package dev.nastyazhabko.eventmanager.location.controller;
 
+import dev.nastyazhabko.eventmanager.location.service.LocationService;
+import dev.nastyazhabko.eventmanager.location.converter.LocationDtoConverter;
+import dev.nastyazhabko.eventmanager.location.dto.Location;
+import dev.nastyazhabko.eventmanager.location.dto.LocationDto;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,7 +56,7 @@ public class LocationController {
     public LocationDto updateLocation(
             @RequestBody @Valid LocationDto locationToUpdate,
             @PathVariable int id) {
-        logger.info("Get request for updateLocation: id = {}, locationToUpdate = {}", id, locationToUpdate);
+        logger.info("Get request for update location: id = {}, locationToUpdate = {}", id, locationToUpdate);
 
         var location = locationService.updateLocation(
                 id,

@@ -1,7 +1,7 @@
 package dev.nastyazhabko.eventmanager.security.jwt;
 
-import dev.nastyazhabko.eventmanager.user.User;
-import dev.nastyazhabko.eventmanager.user.UserService;
+import dev.nastyazhabko.eventmanager.user.dto.User;
+import dev.nastyazhabko.eventmanager.user.service.UserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

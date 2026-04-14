@@ -1,6 +1,10 @@
-package dev.nastyazhabko.eventmanager.user;
+package dev.nastyazhabko.eventmanager.user.service;
 
 import dev.nastyazhabko.eventmanager.security.SignUpRequest;
+import dev.nastyazhabko.eventmanager.user.dto.User;
+import dev.nastyazhabko.eventmanager.user.entity.UserEntity;
+import dev.nastyazhabko.eventmanager.user.enums.UserRole;
+import dev.nastyazhabko.eventmanager.user.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,8 +22,8 @@ public class UserService {
 
     public UserService(UserRepository userRepository,
                        PasswordEncoder passwordEncoder,
-                       @Value("pass.admin") String adminPassword,
-                       @Value("pass.user") String userPassword) {
+                       @Value("${pass.admin}") String adminPassword,
+                       @Value("${pass.user}") String userPassword) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.adminPassword = adminPassword;
