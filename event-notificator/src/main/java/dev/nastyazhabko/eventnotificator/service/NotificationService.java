@@ -17,17 +17,20 @@ public class NotificationService {
     Logger log = LoggerFactory.getLogger(NotificationService.class);
     private final NotificationRepository notificationRepository;
     private final NotificationConverter notificationConverter;
+    private final NotificationCounterService notificationCounterService;
     private final PayloadService payloadService;
 
-    public NotificationService(NotificationRepository notificationRepository, NotificationConverter notificationConverter, PayloadService payloadService) {
+    public NotificationService(NotificationRepository notificationRepository, NotificationConverter notificationConverter, NotificationCounterService notificationCounterService, PayloadService payloadService) {
         this.notificationRepository = notificationRepository;
         this.notificationConverter = notificationConverter;
+        this.notificationCounterService = notificationCounterService;
         this.payloadService = payloadService;
     }
 
     public void saveNotification(Notification notification) {
         log.info("Saving notification: {}", notification);
         notificationRepository.save(notificationConverter.toEntity(notification));
+        notificationCounterService.incrementUnread(notification.userId(), 1L);
     }
 
     public List<Notification> getAllUserNotifications(Integer userId) {
@@ -40,7 +43,10 @@ public class NotificationService {
 
     public List<Integer> markAllNotificationsAsRead(Integer userId) {
         log.info("Marking all user notifications as read for {}", userId);
-        return notificationRepository.markAsReadByUserId(userId);
+        List<Integer> readNotifications = notificationRepository.markAsReadByUserId(userId);
+        notificationCounterService.syncUnreadFromDB(userId);
+
+        return readNotifications;
     }
 
     @Scheduled(cron = "${notification.clearing}")

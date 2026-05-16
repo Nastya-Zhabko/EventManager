@@ -14,6 +14,9 @@ import dev.nastyazhabko.eventmanager.event.exception.UserNotAdminAndNotOwnerOfEv
 import jakarta.persistence.EntityNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -29,14 +32,16 @@ public class EventService {
     private final AuthenticationService authenticationService;
     private final EventPermissionService eventPermissionService;
     private final SendNotificationService sendNotificationService;
+    private final CacheManager cacheManager;
 
-    public EventService(EventRepository eventRepository, LocationRepository locationRepository, EventConverter eventConverter, AuthenticationService authenticationService, EventPermissionService eventPermissionService, SendNotificationService sendNotificationService) {
+    public EventService(EventRepository eventRepository, LocationRepository locationRepository, EventConverter eventConverter, AuthenticationService authenticationService, EventPermissionService eventPermissionService, SendNotificationService sendNotificationService, CacheManager cacheManager) {
         this.eventRepository = eventRepository;
         this.locationRepository = locationRepository;
         this.eventConverter = eventConverter;
         this.authenticationService = authenticationService;
         this.eventPermissionService = eventPermissionService;
         this.sendNotificationService = sendNotificationService;
+        this.cacheManager = cacheManager;
     }
 
     public Event createEvent(Event event, User user) {
@@ -57,6 +62,10 @@ public class EventService {
         return eventConverter.toDomain(eventRepository.save(eventEntity));
     }
 
+    @CacheEvict(
+            value = "event",
+            key = "'id:' + #id"
+    )
     public void softDeleteEvent(Integer id) {
         var event = eventRepository.findById(id);
         if (event.isEmpty()) {
@@ -71,6 +80,11 @@ public class EventService {
         eventRepository.save(event.get());
     }
 
+    @Cacheable(
+            value = "event",
+            key = "'id:' + #id",
+            cacheManager = "eventCacheManager"
+    )
     public Event getEventById(Integer id) {
         var event = eventRepository.findById(id)
                 .orElseThrow(
@@ -80,6 +94,10 @@ public class EventService {
         return eventConverter.toDomain(event);
     }
 
+    @CacheEvict(
+            value = "event",
+            key = "'id:' + #id"
+    )
     public Event updateEvent(Integer id, Event eventToUpdate) {
         var event = eventRepository.findById(id);
         if (event.isEmpty()) {
@@ -151,6 +169,11 @@ public class EventService {
                 sendNotificationService.sendNotification(eventConverter.toDomain(event), EventStatus.STARTED);
                 event.setStatus(EventStatus.STARTED);
                 eventRepository.save(event);
+                try {
+                    cacheManager.getCache("event").evict("id:" + event.getId());
+                } catch (Exception e) {
+                    logger.error("Got exception while cache evicting" + e.getMessage());
+                }
             }
         });
 
@@ -162,6 +185,11 @@ public class EventService {
                 sendNotificationService.sendNotification(eventConverter.toDomain(event), EventStatus.FINISHED);
                 event.setStatus(EventStatus.FINISHED);
                 eventRepository.save(event);
+                try {
+                    cacheManager.getCache("event").evict("id:" + event.getId());
+                } catch (Exception e) {
+                    logger.error("Got exception while cache evicting" + e.getMessage());
+                }
             }
         });
     }

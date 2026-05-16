@@ -37,4 +37,6 @@ public interface NotificationRepository extends JpaRepository<NotificationEntity
     Set<Integer> deleteReadNotificationByDate(@Param("date") OffsetDateTime date);
 
     List<NotificationEntity> findByPayloadId(Integer payloadId);
+
+    long countByUserIdAndIsReadFalse(Integer userId);
 }

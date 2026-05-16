@@ -78,7 +78,6 @@ public class GlobalExceptionHandler {
                 .collect(Collectors.joining(", "));
     }
 
-
     @ExceptionHandler
     public ResponseEntity<ServerErrorDto> handleException(Exception e) {
         log.error("Got exception", e);
