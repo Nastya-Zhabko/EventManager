@@ -1,5 +1,7 @@
 package dev.nastyazhabko.eventnotificator.kafka;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.nastyazhabko.eventcommon.kafka.EventChangeKafkaMessage;
 import dev.nastyazhabko.eventnotificator.dto.Notification;
 import dev.nastyazhabko.eventnotificator.dto.Payload;
@@ -10,7 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
-import tools.jackson.databind.ObjectMapper;
+
 
 import java.util.List;
 import java.util.UUID;
@@ -31,7 +33,7 @@ public class NotificationListener {
     @KafkaListener(topics = "${topic.name}", containerFactory = "containerFactory")
     public void listenNotification(
             ConsumerRecord<UUID, EventChangeKafkaMessage> record
-    ) {
+    ) throws JsonProcessingException {
         if (payloadService.findPayloadByMessageId(record.key())) {
             log.info("Payload with message id {} already exists", record.key());
             return;

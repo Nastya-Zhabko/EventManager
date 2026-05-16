@@ -9,6 +9,9 @@ import dev.nastyazhabko.eventmanager.location.repository.LocationRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,6 +30,10 @@ public class LocationService {
     }
 
 
+    @CacheEvict(
+            value = "locations",
+            key = "'all'"
+    )
     public Location createLocation(Location locationToCreate) {
         LocationEntity locationEntity = locationEntityConverter.toEntity(locationToCreate);
         logger.info("New location created: " + locationEntity);
@@ -34,6 +41,11 @@ public class LocationService {
                 locationRepository.save(locationEntity));
     }
 
+    @Cacheable(
+            value = "locations",
+            key = "'all'",
+            cacheManager = "listLocationCacheManager"
+    )
     public List<Location> getAllLocations() {
         return locationRepository
                 .findAll()
@@ -42,17 +54,31 @@ public class LocationService {
                 .toList();
     }
 
+    @Caching(evict = {
+            @CacheEvict(
+                    value = "location",
+                    key = "'id:' + #id"
+            ),
+            @CacheEvict(
+                    value = "locations",
+                    key = "'all'"
+            )
+    })
     public void deleteLocation(int id) {
         if (!locationRepository.existsById(id)) {
             throw new EntityNotFoundException("Локация с id=" + id + " не найдена");
         }
-        if(eventRepository.existsByLocationId(id)) {
+        if (eventRepository.existsByLocationId(id)) {
             throw new LocationHaveEventsException("На локации с id=" + id + " зарегистрированы мероприятия");
         }
         logger.info("Deleting location with id=" + id);
         locationRepository.deleteById(id);
     }
 
+    @Cacheable(
+            value = "location",
+            key = "'id:' + #id",
+            cacheManager = "locationCacheManager")
     public Location getLocationById(int id) {
         var location = locationRepository.findById(id)
                 .orElseThrow(() ->
@@ -62,6 +88,16 @@ public class LocationService {
         return locationEntityConverter.toDomain(location);
     }
 
+    @Caching(evict = {
+            @CacheEvict(
+                    value = "location",
+                    key = "'id:' + #id"
+            ),
+            @CacheEvict(
+                    value = "locations",
+                    key = "'all'"
+            )
+    })
     public Location updateLocation(int id, Location locationToUpdate) {
         if (!locationRepository.existsById(id)) {
             throw new EntityNotFoundException("Локация с id=" + id + " не найдена");
